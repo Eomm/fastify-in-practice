@@ -20,6 +20,15 @@ create:
 		-d '{"text":"$(text)","done":false}' \
 		| jq .
 
+create-invalid:
+	@curl \
+		--silent \
+		-X POST \
+		http://localhost:$(port)/todos \
+		-H 'Content-Type: application/json' \
+		-d '{}' \
+		| jq .
+
 do:
 	@curl \
 		--silent \

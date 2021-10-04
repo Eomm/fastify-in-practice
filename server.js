@@ -2,6 +2,7 @@
 
 const { fastify } = require('fastify')
 const configLoader = require('./lib/config')
+const schemas = require('./lib/schemas')
 
 async function run () {
   const config = await configLoader()
@@ -12,7 +13,11 @@ async function run () {
 
   app.register(require('fastify-mongodb'), config.mongo)
 
-  app.post('/todos', async function insertTodo (request, reply) {
+  app.post('/todos', {
+    schema: {
+      body: schemas.todoSchema
+    }
+  }, async function insertTodo (request, reply) {
     const todo = request.body
     const todosCollection = this.mongo.db.collection('todos')
     const result = await todosCollection.insertOne(todo)
@@ -25,7 +30,11 @@ async function run () {
     return todosCollection.find().toArray()
   })
 
-  app.put('/todos/:id', async function insertTodo (request, reply) {
+  app.put('/todos/:id', {
+    schema: {
+      body: schemas.todoSchema
+    }
+  }, async function insertTodo (request, reply) {
     const todo = request.body
     const todosCollection = this.mongo.db.collection('todos')
     const result = await todosCollection.updateOne(

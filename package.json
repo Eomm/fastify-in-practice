@@ -6,6 +6,8 @@
   "scripts": {
     "lint:fix": "standard --fix",
     "lint": "standard",
+    "mongo:start": "docker run --rm -d -p 27017:27017 --name mongo-todo mongo:4",
+    "mongo:stop": "docker stop mongo-todo",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,7 +23,8 @@
   },
   "homepage": "https://github.com/Eomm/fastify-in-practice#readme",
   "dependencies": {
-    "fastify": "^3.22.0"
+    "fastify": "^3.22.0",
+    "fastify-mongodb": "^4.1.0"
   },
   "devDependencies": {
     "standard": "^16.0.3"

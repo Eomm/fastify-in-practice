@@ -1,32 +1,43 @@
 'use strict'
 
 const { fastify } = require('fastify')
-const Db = require('./lib/db')
+
 const app = fastify({
   logger: true
 })
 
-const todoDb = Db({})
+app.register(require('fastify-mongodb'), {
+  url: process.env.MONGODB_URL || 'mongodb://localhost:27017/fastify-mongodb-example'
+})
 
 app.post('/todos', async function insertTodo (request, reply) {
   const todo = request.body
-  const id = await todoDb.insert(todo)
+  const todosCollection = this.mongo.db.collection('todos')
+  const result = await todosCollection.insertOne(todo)
   reply.code(201)
-  return { id }
+  return { id: result.insertedId }
 })
 
 app.get('/todos', function readTodos (request, reply) {
-  return todoDb.readAll()
+  const todosCollection = this.mongo.db.collection('todos')
+  return todosCollection.find().toArray()
 })
 
 app.put('/todos/:id', async function insertTodo (request, reply) {
   const todo = request.body
-  const todoUpdated = await todoDb.update({
-    _id: request.params.id,
-    done: todo.done
+  const todosCollection = this.mongo.db.collection('todos')
+  const result = await todosCollection.updateOne({ _id: this.mongo.ObjectId(request.params.id) }, {
+    $set: {
+      done: todo.done
+    }
   })
+  if (result.matchedCount === 0) {
+    const error = new Error('Object not found: ' + request.params.id)
+    error.status = 404
+    throw error
+  }
   reply.code(201)
-  return todoUpdated
+  return { id: request.params.id }
 })
 
-app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 8080)

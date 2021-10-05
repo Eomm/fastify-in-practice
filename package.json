@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Eomm/fastify-in-practice#readme",
   "dependencies": {
     "fastify": "^3.22.0",
+    "fastify-basic-auth": "^2.1.0",
     "fastify-mongodb": "^4.1.0"
   },
   "devDependencies": {

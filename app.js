@@ -1,6 +1,7 @@
 'use strict'
 
 const { fastify } = require('fastify')
+const basicAuth = require('fastify-basic-auth')
 const todoPlugin = require('./todo')
 
 module.exports = function buildApplication (config) {
@@ -12,10 +13,24 @@ module.exports = function buildApplication (config) {
   })
 
   app.register(todoPlugin, config)
-  app.register(todoPlugin, {
-    prefix: '/acme',
-    mongo: config.mongoAcme
+  app.register(async function authPlugin (app, opts) {
+    await app.register(basicAuth, { validate })
+
+    app.addHook('preHandler', app.basicAuth)
+
+    app.register(todoPlugin, {
+      prefix: '/acme',
+      mongo: config.mongoAcme
+    })
   })
 
   return app
+}
+
+function validate (username, password, req, reply, done) {
+  if (username === 'admin' && password === 'admin') {
+    done()
+  } else {
+    done(new Error('Winter is coming'))
+  }
 }

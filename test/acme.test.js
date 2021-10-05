@@ -9,10 +9,10 @@ const testConfig = {
   env: 'test',
   logLevel: 'error',
   mongo: {
-    url: 'mongodb://localhost:27017/test'
+    url: 'mongodb://localhost:27017/test-two'
   },
   mongoAcme: {
-    url: 'mongodb://localhost:27017/acme'
+    url: 'mongodb://localhost:27017/acme-two'
   }
 }
 
@@ -34,14 +34,69 @@ beforeEach(async t => {
   t.teardown(() => app.close())
 })
 
+test('check auth', async t => {
+  const app = t.context.app
+
+  const response = await app.inject({
+    method: 'POST',
+    url: '/acme/todos',
+    payload: {
+      text: 'test todo'
+    }
+  })
+
+  t.equal(response.statusCode, 401)
+
+  t.test('read todos', async t => {
+    const app = t.context.app
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/acme/todos'
+    })
+
+    t.equal(response.statusCode, 401)
+  })
+
+  t.test('read todos with wrong token', async t => {
+    const app = t.context.app
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/acme/todos',
+      headers: {
+        authorization: basicAuth('foo', 'admin')
+      }
+    })
+
+    t.equal(response.statusCode, 401)
+  })
+
+  t.test('complete todos', async t => {
+    const app = t.context.app
+
+    const response = await app.inject({
+      method: 'put',
+      url: '/acme/todos/' + 'a'.repeat(24),
+      payload: {
+        done: true
+      }
+    })
+    t.equal(response.statusCode, 401)
+  })
+})
+
 test('create todo', async t => {
   const app = t.context.app
 
   const response = await app.inject({
     method: 'POST',
-    url: '/todos',
+    url: '/acme/todos',
     payload: {
       text: 'test todo'
+    },
+    headers: {
+      authorization: basicAuth('admin', 'admin')
     }
   })
 
@@ -55,7 +110,10 @@ test('create todo', async t => {
 
     const response = await app.inject({
       method: 'GET',
-      url: '/todos'
+      url: '/acme/todos',
+      headers: {
+        authorization: basicAuth('admin', 'admin')
+      }
     })
 
     t.equal(response.statusCode, 200)
@@ -68,9 +126,12 @@ test('create todo', async t => {
 
     const response = await app.inject({
       method: 'put',
-      url: '/todos/' + todo.id,
+      url: '/acme/todos/' + todo.id,
       payload: {
         done: true
+      },
+      headers: {
+        authorization: basicAuth('admin', 'admin')
       }
     })
     t.equal(response.statusCode, 200)
@@ -80,7 +141,10 @@ test('create todo', async t => {
 
       const response = await app.inject({
         method: 'GET',
-        url: '/todos'
+        url: '/acme/todos',
+        headers: {
+          authorization: basicAuth('admin', 'admin')
+        }
       })
 
       t.equal(response.statusCode, 200)
@@ -90,28 +154,6 @@ test('create todo', async t => {
   })
 })
 
-test('complete not existing todo', async t => {
-  const app = t.context.app
-
-  const response = await app.inject({
-    method: 'put',
-    url: '/todos/' + 'a'.repeat(24),
-    payload: {
-      done: true
-    }
-  })
-  t.equal(response.statusCode, 404)
-})
-
-test('validation error', async t => {
-  const app = t.context.app
-
-  const response = await app.inject({
-    method: 'put',
-    url: '/todos/fooo',
-    payload: {
-      done: true
-    }
-  })
-  t.equal(response.statusCode, 400)
-})
+function basicAuth (username, password) {
+  return 'Basic ' + Buffer.from(username + ':' + password).toString('base64')
+}

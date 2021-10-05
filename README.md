@@ -22,3 +22,16 @@ npm install standard -D
 npm install pino-pretty -D
 code server.js
 ```
+
+### Branch `two`
+
+- Test legacy
+- Estrai plugin
+- Siblings plugin
+- Aggiungi autenticazione
+
+```sh
+npm install tap -D
+npm install mongo-clean -D
+npm install fastify-basic-auth
+```

@@ -3,6 +3,8 @@
 const schemas = require('./lib/schemas')
 
 function todoPlugin (app, opts, next) {
+  app.register(require('fastify-mongodb'), opts.mongo)
+
   app.post('/todos', {
     schema: {
       body: schemas.todoSchema

@@ -11,8 +11,11 @@ module.exports = function buildApplication (config) {
     }
   })
 
-  app.register(require('fastify-mongodb'), config.mongo)
-  app.register(todoPlugin)
+  app.register(todoPlugin, config)
+  app.register(todoPlugin, {
+    prefix: '/acme',
+    mongo: config.mongoAcme
+  })
 
   return app
 }

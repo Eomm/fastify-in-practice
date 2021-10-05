@@ -8,7 +8,10 @@ async function run () {
   const config = await configLoader()
 
   const app = fastify({
-    logger: true
+    logger: {
+      level: 'debug',
+      prettyPrint: config.env !== 'production'
+    }
   })
 
   app.register(require('fastify-mongodb'), config.mongo)

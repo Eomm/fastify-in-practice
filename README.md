@@ -4,7 +4,14 @@ Fastify ha una solida architettura a plugin, è altamente performante, supporta 
 
 ## Steps
 
-### Project inizialization
+### Branch `one`
+
+- Preparazione del progetto
+- Creazione delle routes
+- Connessione al database
+- Validazione input
+- Configurazione applicazione
+- Logging
 
 ```sh
 mkdir fastify-in-practice
@@ -12,6 +19,6 @@ cd fastify-in-practice
 npm init --yes
 npm install fastify
 npm install standard -D
+npm install pino-pretty -D
 code server.js
 ```
-

@@ -50,7 +50,6 @@ module.exports = function buildApplication (config) {
       error.status = 404
       throw error
     }
-    reply.code(201)
     return { id: request.params.id }
   })
 

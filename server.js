@@ -9,7 +9,7 @@ async function run () {
 
   const app = fastify({
     logger: {
-      level: 'debug',
+      level: config.logLevel,
       prettyPrint: config.env !== 'production'
     }
   })

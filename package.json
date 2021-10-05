@@ -9,7 +9,7 @@
     "mongo:start": "docker run --rm -d -p 27017:27017 --name mongo-todo mongo:4",
     "mongo:stop": "docker stop mongo-todo",
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap test/**.test.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,9 @@
     "fastify-mongodb": "^4.1.0"
   },
   "devDependencies": {
+    "mongo-clean": "^2.0.0",
     "pino-pretty": "^7.0.1",
-    "standard": "^16.0.3"
+    "standard": "^16.0.3",
+    "tap": "^15.0.10"
   }
 }

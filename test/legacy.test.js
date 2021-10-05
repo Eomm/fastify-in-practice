@@ -61,7 +61,6 @@ test('create todo', async t => {
       method: 'put',
       url: '/todos/' + todo.id,
       payload: {
-        text: 'test todo',
         done: true
       }
     })
@@ -80,4 +79,30 @@ test('create todo', async t => {
       t.ok(response.json()[0].done)
     })
   })
+})
+
+test('complete not existing todo', async t => {
+  const app = t.context.app
+
+  const response = await app.inject({
+    method: 'put',
+    url: '/todos/' + 'a'.repeat(24),
+    payload: {
+      done: true
+    }
+  })
+  t.equal(response.statusCode, 404)
+})
+
+test('validation error', async t => {
+  const app = t.context.app
+
+  const response = await app.inject({
+    method: 'put',
+    url: '/todos/fooo',
+    payload: {
+      done: true
+    }
+  })
+  t.equal(response.statusCode, 400)
 })

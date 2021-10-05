@@ -35,7 +35,8 @@ async function run () {
 
   app.put('/todos/:id', {
     schema: {
-      body: schemas.todoSchema
+      params: schemas.todoIdSchema,
+      body: schemas.todoUpdateSchema
     }
   }, async function insertTodo (request, reply) {
     const todo = request.body

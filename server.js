@@ -18,7 +18,7 @@ async function run () {
 
   app.post('/todos', {
     schema: {
-      body: schemas.todoSchema
+      body: schemas.todoInputSchema
     }
   }, async function insertTodo (request, reply) {
     const todo = request.body
@@ -28,9 +28,20 @@ async function run () {
     return { id: result.insertedId }
   })
 
-  app.get('/todos', function readTodos (request, reply) {
+  app.get('/todos', {
+    schema: {
+      response: {
+        200: schemas.todosArraySchema
+      }
+    }
+  }, function readTodos (request, reply) {
     const todosCollection = this.mongo.db.collection('todos')
-    return todosCollection.find().toArray()
+    return todosCollection.find().toArray().then(docs => {
+      return docs.map(d => {
+        d.id = d._id.toString()
+        return d
+      })
+    })
   })
 
   app.put('/todos/:id', {

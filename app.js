@@ -2,7 +2,7 @@
 
 const { fastify } = require('fastify')
 const basicAuth = require('fastify-basic-auth')
-const todoPlugin = require('./todo')
+const todoPlugin = require('./plugin/todoPlugin')
 
 module.exports = function buildApplication (config) {
   const app = fastify({
@@ -13,6 +13,7 @@ module.exports = function buildApplication (config) {
   })
 
   app.register(todoPlugin, config)
+
   app.register(async function authPlugin (app, opts) {
     await app.register(basicAuth, { validate })
 

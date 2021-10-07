@@ -1,6 +1,6 @@
 'use strict'
 
-const schemas = require('./lib/schemas')
+const schemas = require('../lib/schemas')
 
 function todoPlugin (app, opts, next) {
   app.register(require('fastify-mongodb'), opts.mongo)

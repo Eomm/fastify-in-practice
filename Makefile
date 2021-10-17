@@ -11,6 +11,12 @@ start:
 stop:
 	@docker-compose -f $(project)/docker-compose.yml down
 
+ping:
+	@curl \
+		--silent \
+		http://localhost:$(port)/ \
+		| jq .
+
 create:
 	@curl \
 		--silent \

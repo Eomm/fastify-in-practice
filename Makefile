@@ -1,15 +1,17 @@
 
 port := 8080
 
-# username=come password=tocode
-auth := Basic Y29tZTp0b2NvZGU=
-#-H 'Authorization: $(auth)'
+# url := http://localhost:$(port)/todos
+# auth := ''
+
+url := http://localhost:$(port)/acme/todos
+auth := Basic YWRtaW46YWRtaW4=
 
 start:
-	@docker-compose -f $(project)/docker-compose.yml up
+	@npm run mongo:start
 
 stop:
-	@docker-compose -f $(project)/docker-compose.yml down
+	@npm run mongo:stop
 
 ping:
 	@curl \
@@ -20,32 +22,32 @@ ping:
 create:
 	@curl \
 		--silent \
-		-X POST \
-		http://localhost:$(port)/todos \
+		-X POST $(url) \
 		-H 'Content-Type: application/json' \
+		-H 'Authorization: $(auth)' \
 		-d '{"text":"$(text)","done":false}' \
 		| jq .
 
 create-invalid:
 	@curl \
 		--silent \
-		-X POST \
-		http://localhost:$(port)/todos \
+		-X POST $(url) \
 		-H 'Content-Type: application/json' \
+		-H 'Authorization: $(auth)' \
 		-d '{}' \
 		| jq .
 
 do:
 	@curl \
 		--silent \
-		-X PUT \
-		http://localhost:$(port)/todos/$(id) \
+		-X PUT $(url)/$(id) \
 		-H 'Content-Type: application/json' \
+		-H 'Authorization: $(auth)' \
 		-d '{"done":true}' \
 		| jq .
 
 list:
 	@curl \
-		--silent \
-		http://localhost:$(port)/todos \
+		--silent $(url) \
+		-H 'Authorization: $(auth)' \
 		| jq .

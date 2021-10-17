@@ -9,7 +9,7 @@
     "mongo:start": "docker run --rm -d -p 27017:27017 --name mongo-todo mongo:4",
     "mongo:stop": "docker stop mongo-todo",
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap --no-check-coverage test/**.test.js"
   },
   "repository": {
     "type": "git",
@@ -24,10 +24,14 @@
   "homepage": "https://github.com/Eomm/fastify-in-practice#readme",
   "dependencies": {
     "fastify": "^3.22.0",
-    "fastify-mongodb": "^4.1.0"
+    "fastify-basic-auth": "^2.1.0",
+    "fastify-mongodb": "^4.1.0",
+    "fastify-plugin": "^3.0.0"
   },
   "devDependencies": {
+    "mongo-clean": "^2.0.0",
     "pino-pretty": "^7.0.1",
-    "standard": "^16.0.3"
+    "standard": "^16.0.3",
+    "tap": "^15.0.10"
   }
 }

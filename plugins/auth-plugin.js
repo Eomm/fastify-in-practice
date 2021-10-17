@@ -1,13 +1,13 @@
 'use strict'
 
-const fp = require('fastify-plugin')
+const breakEncapsulation = require('fastify-plugin') // formerly fp
 
 async function authPlugin (app, opts) {
   await app.register(require('fastify-basic-auth'), { validate })
   app.addHook('preHandler', app.basicAuth)
 }
 
-module.exports = fp(authPlugin)
+module.exports = breakEncapsulation(authPlugin)
 
 function validate (username, password, req, reply, done) {
   if (username === 'admin' && password === 'admin') {

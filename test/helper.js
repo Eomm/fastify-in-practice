@@ -9,6 +9,10 @@ async function cleanMongo (url) {
   c.close()
 }
 
+function basicAuth (username, password) {
+  return 'Basic ' + Buffer.from(username + ':' + password).toString('base64')
+}
+
 function to100 (t, build, testConfig) {
   t.test('complete not existing todo', async t => {
     const app = build(testConfig)
@@ -41,5 +45,6 @@ function to100 (t, build, testConfig) {
 
 module.exports = {
   cleanMongo,
-  to100
+  to100,
+  basicAuth
 }

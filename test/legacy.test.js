@@ -1,41 +1,25 @@
 'use strict'
 
-const { test, beforeEach } = require('tap')
-const mongoClean = require('mongo-clean')
-const { MongoClient } = require('mongodb')
+const t = require('tap')
 const build = require('../app')
+const helper = require('./helper')
 
 const testConfig = {
   env: 'test',
-  logLevel: 'error',
+  logger: false,
   mongo: {
-    url: 'mongodb://localhost:27017/test'
-  },
-  mongoAcme: {
-    url: 'mongodb://localhost:27017/acme'
+    url: 'mongodb://localhost:27017/test',
+    forceClose: true
   }
 }
 
-beforeEach(async t => {
-  if (t.context.app) {
-    return
-  }
-
-  const c1 = await MongoClient.connect(testConfig.mongo.url, { w: 1 })
-  await mongoClean(c1.db())
-  c1.close()
-
-  const c2 = await MongoClient.connect(testConfig.mongoAcme.url, { w: 1 })
-  await mongoClean(c2.db())
-  c2.close()
-
-  const app = build(testConfig)
-  t.context.app = app
-  t.teardown(() => app.close())
+t.test('prepare data', async t => {
+  await helper.cleanMongo(testConfig.mongo.url)
 })
 
-test('create todo', async t => {
-  const app = t.context.app
+t.test('insert', async t => {
+  const app = build(testConfig)
+  t.teardown(() => app.close())
 
   const response = await app.inject({
     method: 'POST',
@@ -50,9 +34,7 @@ test('create todo', async t => {
   const todo = response.json()
   t.ok(todo.id)
 
-  t.test('read todos', async t => {
-    const app = t.context.app
-
+  t.test('read', async t => {
     const response = await app.inject({
       method: 'GET',
       url: '/todos'
@@ -63,9 +45,7 @@ test('create todo', async t => {
     t.notOk(response.json()[0].done)
   })
 
-  t.test('complete todos', async t => {
-    const app = t.context.app
-
+  t.test('update', async t => {
     const response = await app.inject({
       method: 'put',
       url: '/todos/' + todo.id,
@@ -74,44 +54,8 @@ test('create todo', async t => {
       }
     })
     t.equal(response.statusCode, 200)
-
-    t.test('read updated todos', async t => {
-      const app = t.context.app
-
-      const response = await app.inject({
-        method: 'GET',
-        url: '/todos'
-      })
-
-      t.equal(response.statusCode, 200)
-      t.equal(response.json().length, 1)
-      t.ok(response.json()[0].done)
-    })
+    t.equal(response.json().id, todo.id)
   })
 })
 
-test('complete not existing todo', async t => {
-  const app = t.context.app
-
-  const response = await app.inject({
-    method: 'put',
-    url: '/todos/' + 'a'.repeat(24),
-    payload: {
-      done: true
-    }
-  })
-  t.equal(response.statusCode, 404)
-})
-
-test('validation error', async t => {
-  const app = t.context.app
-
-  const response = await app.inject({
-    method: 'put',
-    url: '/todos/fooo',
-    payload: {
-      done: true
-    }
-  })
-  t.equal(response.statusCode, 400)
-})
+helper.to100(t, build, testConfig)

@@ -1,8 +1,7 @@
 'use strict'
 
 const { fastify } = require('fastify')
-const basicAuth = require('fastify-basic-auth')
-const todoPlugin = require('./plugin/todoPlugin')
+const todoPlugin = require('./plugins/todo-plugin')
 
 module.exports = function buildApplication (config) {
   const app = fastify({
@@ -15,9 +14,7 @@ module.exports = function buildApplication (config) {
   app.register(todoPlugin, config)
 
   app.register(async function authPlugin (app, opts) {
-    await app.register(basicAuth, { validate })
-
-    app.addHook('preHandler', app.basicAuth)
+    app.register(require('./plugins/auth-plugin'))
 
     // uso di fastify-plugin
     app.register(todoPlugin, {
@@ -27,12 +24,4 @@ module.exports = function buildApplication (config) {
   })
 
   return app
-}
-
-function validate (username, password, req, reply, done) {
-  if (username === 'admin' && password === 'admin') {
-    done()
-  } else {
-    done(new Error('Winter is coming'))
-  }
 }

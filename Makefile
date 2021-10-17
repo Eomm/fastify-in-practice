@@ -13,6 +13,12 @@ start:
 stop:
 	@npm run mongo:stop
 
+ping:
+	@curl \
+		--silent \
+		http://localhost:$(port)/ \
+		| jq .
+
 create:
 	@curl \
 		--silent \

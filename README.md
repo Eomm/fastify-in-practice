@@ -34,9 +34,8 @@ make list
 mkdir fastify-in-practice
 cd fastify-in-practice
 npm init --yes
-npm install fastify
-npm install standard -D
-npm install pino-pretty -D
+npm install fastify fastify-mongodb
+npm install standard pino-pretty -D
 code server.js
 ```
 

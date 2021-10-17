@@ -19,6 +19,7 @@ module.exports = function buildApplication (config) {
 
     app.addHook('preHandler', app.basicAuth)
 
+    // uso di fastify-plugin
     app.register(todoPlugin, {
       prefix: '/acme',
       mongo: config.mongoAcme

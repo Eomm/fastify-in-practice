@@ -13,6 +13,14 @@ La progressione di questa applicazione è suddivisa in 4 branch:
 - `two-init`: lo stato consolidato di partenza per la seconda parte. Dovrebbe coincidere con `one`
 - `two`: lo stato finale del talk
 
+Per provare le chiamate ai servizi senza lasciare la shell, è possibile richiamare il `Makefile`:
+
+```sh
+# make <comando> <param=valore>
+make create text="Fare la spesa"
+make list
+```
+
 ### Branch `one`
 
 - Preparazione del progetto

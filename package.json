@@ -25,7 +25,8 @@
   "dependencies": {
     "fastify": "^3.22.0",
     "fastify-basic-auth": "^2.1.0",
-    "fastify-mongodb": "^4.1.0"
+    "fastify-mongodb": "^4.1.0",
+    "fastify-plugin": "^3.0.0"
   },
   "devDependencies": {
     "mongo-clean": "^2.0.0",

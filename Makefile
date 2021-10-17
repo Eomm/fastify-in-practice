@@ -1,11 +1,11 @@
 
 port := 8080
 
-# url := http://localhost:$(port)/todos
-# auth := ''
+url := http://localhost:$(port)/todos
+auth := ''
 
-url := http://localhost:$(port)/acme/todos
-auth := Basic YWRtaW46YWRtaW4=
+# url := http://localhost:$(port)/acme/todos
+# auth := Basic YWRtaW46YWRtaW4=
 
 start:
 	@npm run mongo:start

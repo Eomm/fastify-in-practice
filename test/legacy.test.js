@@ -10,6 +10,9 @@ const testConfig = {
   mongo: {
     url: 'mongodb://localhost:27017/test',
     forceClose: true
+  },
+  mongoAcme: {
+    url: 'mongodb://localhost:27017/acme-two'
   }
 }
 

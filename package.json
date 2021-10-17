@@ -9,7 +9,7 @@
     "mongo:start": "docker run --rm -d -p 27017:27017 --name mongo-todo mongo:4",
     "mongo:stop": "docker stop mongo-todo",
     "start": "node server.js",
-    "test": "tap test/**.test.js"
+    "test": "tap --no-check-coverage test/**.test.js"
   },
   "repository": {
     "type": "git",

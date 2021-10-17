@@ -5,10 +5,7 @@ const todoPlugin = require('./plugins/todo-plugin')
 
 module.exports = function buildApplication (config) {
   const app = fastify({
-    logger: {
-      level: config.logLevel,
-      prettyPrint: config.env !== 'production'
-    }
+    logger: config.logger
   })
 
   app.register(todoPlugin, config)

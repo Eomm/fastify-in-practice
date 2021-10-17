@@ -47,8 +47,7 @@ code server.js
 - Aggiungi autenticazione
 
 ```sh
-npm install tap -D
-npm install mongo-clean -D
+npm install tap mongo-clean -D
 npm install fastify-basic-auth
 ```
 

@@ -1,13 +1,13 @@
 'use strict'
 
-const { test, beforeEach } = require('tap')
-const mongoClean = require('mongo-clean')
-const { MongoClient } = require('mongodb')
+const t = require('tap')
 const build = require('../app')
+const helper = require('./helper')
+const { basicAuth } = helper
 
 const testConfig = {
   env: 'test',
-  logLevel: 'error',
+  logger: false,
   mongo: {
     url: 'mongodb://localhost:27017/test-two'
   },
@@ -16,40 +16,26 @@ const testConfig = {
   }
 }
 
-beforeEach(async t => {
-  if (t.context.app) {
-    return
-  }
-
-  const c1 = await MongoClient.connect(testConfig.mongo.url, { w: 1 })
-  await mongoClean(c1.db())
-  c1.close()
-
-  const c2 = await MongoClient.connect(testConfig.mongoAcme.url, { w: 1 })
-  await mongoClean(c2.db())
-  c2.close()
-
-  const app = build(testConfig)
-  t.context.app = app
-  t.teardown(() => app.close())
+t.test('prepare data', async t => {
+  await helper.cleanMongo(testConfig.mongoAcme.url)
 })
 
-test('check auth', async t => {
-  const app = t.context.app
+t.test('check auth', async t => {
+  const app = build(testConfig)
+  t.teardown(() => app.close())
 
-  const response = await app.inject({
-    method: 'POST',
-    url: '/acme/todos',
-    payload: {
-      text: 'test todo'
-    }
+  t.test('insert', async t => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/acme/todos',
+      payload: {
+        text: 'test todo'
+      }
+    })
+    t.equal(response.statusCode, 401)
   })
 
-  t.equal(response.statusCode, 401)
-
-  t.test('read todos', async t => {
-    const app = t.context.app
-
+  t.test('read', async t => {
     const response = await app.inject({
       method: 'GET',
       url: '/acme/todos'
@@ -58,23 +44,7 @@ test('check auth', async t => {
     t.equal(response.statusCode, 401)
   })
 
-  t.test('read todos with wrong token', async t => {
-    const app = t.context.app
-
-    const response = await app.inject({
-      method: 'GET',
-      url: '/acme/todos',
-      headers: {
-        authorization: basicAuth('foo', 'admin')
-      }
-    })
-
-    t.equal(response.statusCode, 401)
-  })
-
-  t.test('complete todos', async t => {
-    const app = t.context.app
-
+  t.test('update', async t => {
     const response = await app.inject({
       method: 'put',
       url: '/acme/todos/' + 'a'.repeat(24),
@@ -84,10 +54,22 @@ test('check auth', async t => {
     })
     t.equal(response.statusCode, 401)
   })
+
+  t.test('read todos with wrong token', async t => {
+    const response = await app.inject({
+      method: 'GET',
+      url: '/acme/todos',
+      headers: {
+        authorization: basicAuth('foo', 'admin')
+      }
+    })
+    t.equal(response.statusCode, 401)
+  })
 })
 
-test('create todo', async t => {
-  const app = t.context.app
+t.test('create todo', async t => {
+  const app = build(testConfig)
+  t.teardown(() => app.close())
 
   const response = await app.inject({
     method: 'POST',
@@ -106,8 +88,6 @@ test('create todo', async t => {
   t.ok(todo.id)
 
   t.test('read todos', async t => {
-    const app = t.context.app
-
     const response = await app.inject({
       method: 'GET',
       url: '/acme/todos',
@@ -122,8 +102,6 @@ test('create todo', async t => {
   })
 
   t.test('complete todos', async t => {
-    const app = t.context.app
-
     const response = await app.inject({
       method: 'put',
       url: '/acme/todos/' + todo.id,
@@ -137,8 +115,6 @@ test('create todo', async t => {
     t.equal(response.statusCode, 200)
 
     t.test('read updated todos', async t => {
-      const app = t.context.app
-
       const response = await app.inject({
         method: 'GET',
         url: '/acme/todos',
@@ -153,7 +129,3 @@ test('create todo', async t => {
     })
   })
 })
-
-function basicAuth (username, password) {
-  return 'Basic ' + Buffer.from(username + ':' + password).toString('base64')
-}

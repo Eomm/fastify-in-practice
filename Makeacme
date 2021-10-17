@@ -1,14 +1,8 @@
 
 port := 8080
 
-url := http://localhost:$(port)/todos
-auth := ''
-
-start:
-	@npm run mongo:start
-
-stop:
-	@npm run mongo:stop
+url := http://localhost:$(port)/acme/todos
+auth := Basic YWRtaW46YWRtaW4=
 
 ping:
 	@curl \

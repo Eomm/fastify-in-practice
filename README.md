@@ -24,11 +24,11 @@ make list
 ### Branch `one`
 
 - Preparazione del progetto
+- Logging
 - Creazione delle routes
 - Connessione al database
 - Validazione input
 - Configurazione applicazione
-- Logging
 
 ```sh
 mkdir fastify-in-practice

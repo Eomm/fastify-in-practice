@@ -26,9 +26,8 @@ make list
 - Preparazione del progetto
 - Logging
 - Creazione delle routes
-- Connessione al database
 - Validazione input
-- Configurazione applicazione
+- Connessione al database
 
 ```sh
 mkdir fastify-in-practice
@@ -37,6 +36,12 @@ npm init --yes
 npm install fastify fastify-mongodb
 npm install standard pino-pretty -D
 code server.js
+```
+
+_All you need is conf_
+
+```
+mongodb://localhost:27017/my-todo-app
 ```
 
 ### Branch `two`

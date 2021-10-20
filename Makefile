@@ -16,7 +16,7 @@ ping:
 		http://localhost:$(port)/ \
 		| jq .
 
-create:
+post:
 	@curl \
 		--silent \
 		-X POST $(url) \
@@ -34,7 +34,7 @@ create-invalid:
 		-d '{}' \
 		| jq .
 
-do:
+put:
 	@curl \
 		--silent \
 		-X PUT $(url)/$(id) \
@@ -43,7 +43,7 @@ do:
 		-d '{"done":true}' \
 		| jq .
 
-list:
+get:
 	@curl \
 		--silent $(url) \
 		-H 'Authorization: $(auth)' \

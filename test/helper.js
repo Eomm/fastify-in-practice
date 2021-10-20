@@ -3,6 +3,15 @@
 const mongoClean = require('mongo-clean')
 const { MongoClient } = require('mongodb')
 
+const testConfig = {
+  env: 'test',
+  logger: false,
+  mongo: {
+    url: 'mongodb://localhost:27017/test-execution',
+    forceClose: true
+  }
+}
+
 async function cleanMongo (url) {
   const c = await MongoClient.connect(url, { w: 1 })
   await mongoClean(c.db())
@@ -44,6 +53,7 @@ function to100 (t, build, testConfig) {
 }
 
 module.exports = {
+  testConfig,
   cleanMongo,
   to100,
   basicAuth

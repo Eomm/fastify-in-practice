@@ -1,0 +1,37 @@
+{
+  "name": "fastify-in-practice",
+  "version": "1.0.0",
+  "description": "Fastify ha una solida architettura a plugin, è altamente performante, supporta Typescript e pensa alla developer experience per rendere meno arduo lo sviluppo a noi programmatori. Ma tutto questo cosa vuol dire in pratica? Scopriamolo insieme, creando delle API per la nostra startup. Saliremo poi in una macchina del tempo per vedere come evolve nel tempo il backend scritto con Fastify per capire i vantaggi che questo framework offre durante tutto il ciclo di vita di un software.",
+  "main": "index.js",
+  "scripts": {
+    "lint:fix": "standard --fix",
+    "lint": "standard",
+    "mongo:start": "docker run --rm -d -p 27017:27017 --name mongo-todo mongo:4",
+    "mongo:stop": "docker stop mongo-todo",
+    "start": "node server.js",
+    "test": "tap --no-check-coverage test/**.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eomm/fastify-in-practice.git"
+  },
+  "keywords": [],
+  "author": "Manuel Spigolon <behemoth89@gmail.com> (https://github.com/Eomm)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eomm/fastify-in-practice/issues"
+  },
+  "homepage": "https://github.com/Eomm/fastify-in-practice#readme",
+  "dependencies": {
+    "fastify": "^3.22.0",
+    "fastify-basic-auth": "^2.1.0",
+    "fastify-mongodb": "^4.1.0",
+    "fastify-plugin": "^3.0.0"
+  },
+  "devDependencies": {
+    "mongo-clean": "^2.0.0",
+    "pino-pretty": "^7.0.1",
+    "standard": "^16.0.3",
+    "tap": "^15.0.10"
+  }
+}

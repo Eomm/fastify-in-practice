@@ -1,5 +1,7 @@
 'use strict'
 
+// https://raw.githubusercontent.com/Eomm/fastify-in-practice/two/test/legacy.test.js
+
 const mongoClean = require('mongo-clean')
 const { MongoClient } = require('mongodb')
 

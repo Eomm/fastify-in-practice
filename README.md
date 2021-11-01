@@ -4,7 +4,9 @@ Fastify ha una solida architettura a plugin, è altamente performante, supporta 
 
 ## Steps
 
-Questo repository è utilizzato per il talk che puoi vedere su [YouTube](TODO).
+Questo repository è utilizzato per il talk che puoi vedere su [YouTube](https://www.youtube.com/watch?v=WBvzJeWgylU&t=3833s).
+[Slides](https://docs.google.com/presentation/d/1bpKWlrkdYaWQElMH3z9pkZtRgER7y9uCIpgpW6_rzM4/edit)
+
 
 La progressione di questa applicazione è suddivisa in 4 branch:
 

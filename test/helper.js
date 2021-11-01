@@ -1,15 +1,21 @@
 'use strict'
 
+const fastify = require('fastify')
+const appBuilder = require('../app')
+
 const mongoClean = require('mongo-clean')
 const { MongoClient } = require('mongodb')
 
-const testConfig = {
-  env: 'test',
-  logger: false,
-  mongo: {
-    url: 'mongodb://localhost:27017/test-execution',
-    forceClose: true
+function build (testConfig) {
+  const server = fastify()
+  process.env = {
+    NODE_ENV: 'development',
+    LOG_LEVEL: 'debug',
+    MONGO_URL: testConfig.mongo.url,
+    MONGO_ACME_URL: testConfig.mongoAcme.url
   }
+  server.register(appBuilder)
+  return server
 }
 
 async function cleanMongo (url) {
@@ -53,7 +59,7 @@ function to100 (t, build, testConfig) {
 }
 
 module.exports = {
-  testConfig,
+  build,
   cleanMongo,
   to100,
   basicAuth

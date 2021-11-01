@@ -8,8 +8,9 @@
     "lint": "standard",
     "mongo:start": "docker run --rm -d -p 27017:27017 --name mongo-todo mongo:4",
     "mongo:stop": "docker stop mongo-todo",
-    "start": "node server.js",
-    "test": "tap --no-check-coverage test/**.test.js"
+    "start": "fastify start -l info --options app.js",
+    "dev": "npm run start -- --watch --pretty-logs --debug",
+    "test": "tap test/**.test.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,8 @@
   "dependencies": {
     "fastify": "^3.22.0",
     "fastify-basic-auth": "^2.1.0",
+    "fastify-cli": "^2.13.0",
+    "fastify-env": "^2.1.1",
     "fastify-mongodb": "^4.1.0",
     "fastify-plugin": "^3.0.0"
   },

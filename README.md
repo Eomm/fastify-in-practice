@@ -1,27 +1,60 @@
 # fastify-in-practice
+
+Welcome to this CRUD application.
+Read the blog post at [https://backend.cafe//how-to-use-fastify-and-mongodb](https://backend.cafe//how-to-use-fastify-and-mongodb) for more information:!
+
+
+## How to use
+
+To start the project you need to run the following command:
+
+```
+# checkout the project
+npm install
+npm run mongo:start
+npm run dev
+```
+
+To try the API you can use the following command:
+
+```
+make post text="hello world"
+make get
+make put id=61742e31dda30cab65317784
+make delete id=61742e31dda30cab65317784
+```
+
+
+## How it has started
+
+This repo has been created to create a talk about fastify at the Code to Code 2021 Italian Conference.
+
+- Video on [YouTube](https://www.youtube.com/watch?v=WBvzJeWgylU&t=3833s) (Lang: 🇮🇹)
+- [Slides](https://docs.google.com/presentation/d/1bpKWlrkdYaWQElMH3z9pkZtRgER7y9uCIpgpW6_rzM4/edit) from the talk (Lang: 🇮🇹)
+
+
+### The talk incipit 🇮🇹
+
 Fastify ha una solida architettura a plugin, è altamente performante, supporta Typescript e pensa alla developer experience per rendere meno arduo lo sviluppo a noi programmatori. Ma tutto questo cosa vuol dire in pratica? Scopriamolo insieme, creando delle API per la nostra startup. Saliremo poi in una macchina del tempo per vedere come evolve nel tempo il backend scritto con Fastify per capire i vantaggi che questo framework offre durante tutto il ciclo di vita di un software.
 
 
-## Steps
+#### Talk summary 🇮🇹
 
-Questo repository è utilizzato per il talk che puoi vedere su [YouTube](TODO).
-
-La progressione di questa applicazione è suddivisa in 4 branch:
+La progressione di questa applicazione è suddivisa in branch:
 
 - `one-init`: lo stato iniziale, con l'essenziale per partire come questo README
-- `one`: lo stato finiale della prima parte del talk
 - `two-init`: lo stato consolidato di partenza per la seconda parte. Dovrebbe coincidere con `one`
-- `two`: lo stato finale del talk
+- `main`: lo stato finale del talk
 
 Per provare le chiamate ai servizi senza lasciare la shell, è possibile richiamare il `Makefile`:
 
 ```sh
 # make <comando> <param=valore>
-make create text="Fare la spesa"
-make list
+make post text="Fare la spesa"
+make get
 ```
 
-### Branch `one`
+#### Step `one`
 
 - Preparazione del progetto
 - Logging
@@ -39,7 +72,7 @@ npm install standard pino-pretty -D
 code server.js
 ```
 
-### Branch `two`
+#### Step `two`
 
 - Test legacy
 - Estrai plugin
@@ -51,12 +84,9 @@ npm install tap mongo-clean -D
 npm install fastify-basic-auth
 ```
 
-## Disclaimer
+## Further reading
 
-Questa applicazione è pensata per evidenziare i meccanismi di Fastify e non pretente di essere
-in alcun modo un template base da cui ispirarsi per una reale applicazione di produzione.
-
-Delle buone applicazioni a cui ispirarsi sono invece:
+You may find inspiration on the following projects:
 
 - [Covid Green App](https://github.com/covidgreen/covid-green-backend-api#readme)
 - [Fastify example](https://github.com/delvedor/fastify-example#readme)

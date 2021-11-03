@@ -1,8 +1,8 @@
 'use strict'
 
 const t = require('tap')
-const build = require('../app')
 const helper = require('./helper')
+const { build } = helper
 
 const testConfig = {
   env: 'test',
@@ -55,6 +55,15 @@ t.test('insert', async t => {
       payload: {
         done: true
       }
+    })
+    t.equal(response.statusCode, 200)
+    t.equal(response.json().id, todo.id)
+  })
+
+  t.test('delete', async t => {
+    const response = await app.inject({
+      method: 'delete',
+      url: '/todos/' + todo.id
     })
     t.equal(response.statusCode, 200)
     t.equal(response.json().id, todo.id)

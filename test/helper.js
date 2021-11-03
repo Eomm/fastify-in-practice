@@ -1,15 +1,21 @@
 'use strict'
 
+const fastify = require('fastify')
+const appBuilder = require('../app')
+
 const mongoClean = require('mongo-clean')
 const { MongoClient } = require('mongodb')
 
-const testConfig = {
-  env: 'test',
-  logger: false,
-  mongo: {
-    url: 'mongodb://localhost:27017/test-execution',
-    forceClose: true
+function build (testConfig) {
+  const server = fastify()
+  process.env = {
+    NODE_ENV: 'development',
+    LOG_LEVEL: 'debug',
+    MONGO_URL: testConfig.mongo.url,
+    MONGO_ACME_URL: testConfig.mongoAcme.url
   }
+  server.register(appBuilder)
+  return server
 }
 
 async function cleanMongo (url) {
@@ -37,6 +43,17 @@ function to100 (t, build, testConfig) {
     t.equal(response.statusCode, 404)
   })
 
+  t.test('delete not existing todo', async t => {
+    const app = build(testConfig)
+    t.teardown(() => app.close())
+
+    const response = await app.inject({
+      method: 'delete',
+      url: '/todos/' + 'a'.repeat(24)
+    })
+    t.equal(response.statusCode, 404)
+  })
+
   t.test('validation error', async t => {
     const app = build(testConfig)
     t.teardown(() => app.close())
@@ -53,7 +70,7 @@ function to100 (t, build, testConfig) {
 }
 
 module.exports = {
-  testConfig,
+  build,
   cleanMongo,
   to100,
   basicAuth

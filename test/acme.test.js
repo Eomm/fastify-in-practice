@@ -1,9 +1,8 @@
 'use strict'
 
 const t = require('tap')
-const build = require('../app')
 const helper = require('./helper')
-const { basicAuth } = helper
+const { basicAuth, build } = helper
 
 const testConfig = {
   env: 'test',

@@ -10,7 +10,7 @@ function todoPlugin (app, opts, next) {
     schema: {
       body: schemas.todoInputSchema
     }
-  }, handlers.insertTodo)
+  }, handlers.createTodo)
 
   app.get('/todos', {
     schema: {
@@ -26,6 +26,12 @@ function todoPlugin (app, opts, next) {
       body: schemas.todoUpdateSchema
     }
   }, handlers.updateTodo)
+
+  app.delete('/todos/:id', {
+    schema: {
+      params: schemas.todoIdSchema
+    }
+  }, handlers.deleteTodo)
 
   next()
 }

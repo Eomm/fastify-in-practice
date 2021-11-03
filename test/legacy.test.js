@@ -59,6 +59,15 @@ t.test('insert', async t => {
     t.equal(response.statusCode, 200)
     t.equal(response.json().id, todo.id)
   })
+
+  t.test('delete', async t => {
+    const response = await app.inject({
+      method: 'delete',
+      url: '/todos/' + todo.id
+    })
+    t.equal(response.statusCode, 200)
+    t.equal(response.json().id, todo.id)
+  })
 })
 
 helper.to100(t, build, testConfig)

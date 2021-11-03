@@ -43,6 +43,17 @@ function to100 (t, build, testConfig) {
     t.equal(response.statusCode, 404)
   })
 
+  t.test('delete not existing todo', async t => {
+    const app = build(testConfig)
+    t.teardown(() => app.close())
+
+    const response = await app.inject({
+      method: 'delete',
+      url: '/todos/' + 'a'.repeat(24)
+    })
+    t.equal(response.statusCode, 404)
+  })
+
   t.test('validation error', async t => {
     const app = build(testConfig)
     t.teardown(() => app.close())

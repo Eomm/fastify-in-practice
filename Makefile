@@ -25,15 +25,6 @@ post:
 		-d '{"text":"$(text)","done":false}' \
 		| jq .
 
-create-invalid:
-	@curl \
-		--silent \
-		-X POST $(url) \
-		-H 'Content-Type: application/json' \
-		-H 'Authorization: $(auth)' \
-		-d '{}' \
-		| jq .
-
 put:
 	@curl \
 		--silent \
@@ -46,5 +37,12 @@ put:
 get:
 	@curl \
 		--silent $(url) \
+		-H 'Authorization: $(auth)' \
+		| jq .
+
+delete:
+	@curl \
+		--silent \
+		-X DELETE $(url)/$(id) \
 		-H 'Authorization: $(auth)' \
 		| jq .

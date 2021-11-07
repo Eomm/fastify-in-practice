@@ -8,18 +8,18 @@ const { MongoClient } = require('mongodb')
 
 function build (testConfig) {
   const server = fastify()
-  process.env = {
-    NODE_ENV: 'development',
-    LOG_LEVEL: 'debug',
-    MONGO_URL: testConfig.mongo.url,
-    MONGO_ACME_URL: testConfig.mongoAcme.url
-  }
-  server.register(appBuilder)
+  server.register(appBuilder, {
+    envData: {
+      NODE_ENV: 'development',
+      MONGO_URL: testConfig.mongo.url,
+      MONGO_ACME_URL: testConfig.mongoAcme.url
+    }
+  })
   return server
 }
 
 async function cleanMongo (url) {
-  const c = await MongoClient.connect(url, { w: 1 })
+  const c = await MongoClient.connect(url)
   await mongoClean(c.db())
   c.close()
 }

@@ -5,12 +5,12 @@ const todoPlugin = require('./plugins/todo-plugin')
 
 module.exports = fp(async function application (app, opts) {
   await app.register(require('fastify-env'), {
+    data: opts.envData,
     schema: {
       type: 'object',
       properties: {
         PORT: { type: 'integer', default: 3000 },
         NODE_ENV: { type: 'string' },
-        LOG_LEVEL: { type: 'string' },
         MONGO_URL: { type: 'string' },
         MONGO_ACME_URL: { type: 'string' }
       }

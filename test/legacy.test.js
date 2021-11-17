@@ -16,11 +16,11 @@ const testConfig = {
   }
 }
 
-t.test('prepare data', async t => {
+t.test('spin up phase - prepare data', async t => {
   await helper.cleanMongo(testConfig.mongo.url)
 })
 
-t.test('insert', async t => {
+t.test('create', async t => {
   const app = build(testConfig)
   t.teardown(() => app.close())
 
@@ -35,7 +35,7 @@ t.test('insert', async t => {
   t.equal(response.statusCode, 201)
 
   const todo = response.json()
-  t.ok(todo.id)
+  t.ok(todo.id, 'the id has been returned')
 
   t.test('read', async t => {
     const response = await app.inject({
